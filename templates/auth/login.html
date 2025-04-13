@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentyx - Login</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/logo.png') }}" type="image/x-icon">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/output.css') }}">
+</head>
+
+<body>
+    <div class="flex w-screen flex-wrap text-slate-800">
+        <div class="flex w-full flex-col md:w-1/2">
+            <div class="flex justify-center pt-12 md:justify-start md:pl-12">
+                <a href="#" class="text-2xl font-bold tracking-tighter text-[#2563EB]">Sentyx . </a>
+            </div>
+            <div class="my-auto mx-auto flex flex-col justify-center px-6 pt-8 md:justify-start lg:w-[28rem]">
+                <p class="text-center text-3xl font-bold md:leading-tight md:text-left md:text-5xl tracking-tighter">
+                    Welcome back <br />
+                    to <span class="text-[#2563EB]">Sentyx</span>
+                </p>
+                <p class="mt-2 text-center font-medium md:text-left">Sign in to your account below.</p>
+
+                <form class="flex flex-col items-stretch pt-3 md:pt-8">
+                    <div class="flex flex-col pt-2">
+                        <label for="email" id="email" class="mb-2 font-medium">Email</label>
+                        <div
+                            class="relative flex overflow-hidden rounded-lg border-2 border-gray-300 transition focus-within:border-[#2563EB]">
+                            <input type="email" id="login-email"
+                                class="w-full flex-shrink appearance-none  bg-white py-3 px-4 text-base placeholder-gray-400 focus:outline-none"
+                                placeholder="Email" />
+                        </div>
+                    </div>
+                    <div class="mb-8 flex flex-col pt-4">
+                        <label for="password" id="password" class="mb-2 font-medium">Password</label>
+                        <div
+                            class="relative flex overflow-hidden rounded-lg border-2 border-gray-300 transition focus-within:border-[#2563EB]">
+                            <input type="password" id="login-password"
+                                class="w-full flex-shrink appearance-none  bg-white py-3 px-4 text-base placeholder-gray-400 focus:outline-none"
+                                placeholder="Password" />
+                        </div>
+                    </div>
+                   
+                    <button type="submit"
+                        class="rounded-lg bg-[#2563EB] px-4 py-3 text-center text-base font-semibold text-white shadow-md outline-none ring-blue-500 ring-offset-2 transition hover:bg-blue-700 focus:ring-2 md:w-full">Sign
+                        in</button>
+                </form>
+                <div class="py-12 text-center">
+                    <p class="text-gray-600">
+                        Don't have an account?
+                        <a href="{{ url_for('register') }}"
+                            class="whitespace-nowrap font-semibold text-gray-900 underline underline-offset-4 hover:text-[#2563EB]">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="relative hidden h-screen select-none bg-[#2563EB] bg-gradient-to-br md:block md:w-1/2">
+            <div class="py-16 px-8 text-white xl:w-[40rem] flex flex-col justify-center items-center mx-auto h-full">    
+                <h1 class="text-white text-3xl md:text-6xl font-bold mb-4 text-center">
+                    Unlock the power of <span class="text-[#90CAF9]">sentiment analysis.</span>
+                  </h1>
+                  <p class="text-white/70 text-base md:text-lg max-w-md text-center">
+                    Make smarter decisions with real-time emotional intelligence from your audience data.
+                  </p>        
+                  <img class="w-11/12 max-w-[70%] rounded-lg object-cover mx-auto" src="{{ url_for('static', filename='assets/illustration.png') }}" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</body>
+
+</html>
