@@ -1,7 +1,12 @@
 // Pie Chart
+const sentimentData = document.getElementById("sentiment-data");
+
+const positifPercentage = parseFloat(sentimentData.dataset.positif);
+const negatifPercentage = parseFloat(sentimentData.dataset.negatif);
+const netralPercentage = parseFloat(sentimentData.dataset.netral);
 const getChartOptions = () => {
     return {
-      series: [52.8, 26.8, 20.4],
+      series: [positifPercentage, negatifPercentage, netralPercentage],
       colors: ["#1C64F2", "#16BDCA", "#9061F9"],
       chart: {
         height: 300,
@@ -63,11 +68,17 @@ if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
 }  
 
 // Line Chart
+const lineChartEl = document.getElementById("line-chart-data");
+
+const years = JSON.parse(lineChartEl.dataset.years);
+const positifData = JSON.parse(lineChartEl.dataset.positif);
+const negatifData = JSON.parse(lineChartEl.dataset.negatif);
+const netralData = JSON.parse(lineChartEl.dataset.netral);
+
 const options = {
-    
     xaxis: {
       show: true,
-      categories: ['2021', '2022', '2023', '2024', '2025'],
+      categories: years,
       labels: {
         show: true,
         style: {
@@ -84,7 +95,7 @@ const options = {
     },
     yaxis: {
         min: 0,
-        max: 200,
+        max: 30,
       show: true,
       labels: {
         show: true,
@@ -100,17 +111,17 @@ const options = {
     series: [
       {
         name: "Positif",
-        data: [150, 141, 145, 152, 135],
+        data: positifData,
         color: "#1A56DB",
       },
       {
         name: "Negatif",
-        data: [43, 13, 65, 12, 42],
+        data: negatifData,
         color: "#7E3BF2",
       },
       {
         name: "Netral",
-        data: [23, 43, 12, 65, 32],
+        data: netralData,
         color: "#FBBF24",
       },
     ],
@@ -156,10 +167,10 @@ const options = {
     grid: {
       show: true,
     },
-    }
+}
     
-    if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
-    const chart = new ApexCharts(document.getElementById("labels-chart"), options);
-    chart.render();
-    }
+if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
+  const chart = new ApexCharts(document.getElementById("labels-chart"), options);
+  chart.render();
+}
     

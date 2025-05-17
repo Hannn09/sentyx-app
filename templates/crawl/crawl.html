@@ -1,20 +1,27 @@
 {% extends "layout/index.html" %}
 
-{% block title %}Sentyx - Preprocessing{% endblock %}
+{% block title %}Sentyx - Crawling Tweet{% endblock %}
 
-{% block header %}Preprocessing Data{% endblock %}
+{% block header %}Crawling Tweet{% endblock %}
 
 {% block content %}
+<form action="{{ url_for('crawl_tweet') }}" method="post">
+    <div class="mt-8 flex gap-2 w-full">
+        <input type="text" class="flex-1 w-full border p-3 rounded-lg" placeholder="e.g shopeepaylater, gopaylater"
+            name="keyword" id="keyword" required>
+        </input>
 
-<div class="flex flex-col space-y-8">
+        <button type="submit"
+            class="bg-[#2563EB] text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
+            Search
+        </button>
+    </div>
+</form>
 
-    <form action="{{ url_for('proccess_preprocessing_training') }}" method="get">
-        <button type="submit" class="text-white rounded-xl bg-[#2563EB] font-semibold py-4 px-6 w-fit hover:bg-blue-700 cursor-pointer mt-8">Preprocessing</button>
-    </form>
 
-</div>
-
-<div class="relative flex flex-col w-full h-fit overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mt-8">
+<!-- Table -->
+<div
+    class="relative flex flex-col w-full h-fit overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mt-8">
     <table class="w-full text-left table-auto min-w-full">
         <thead>
             <tr>
@@ -30,25 +37,21 @@
                 </th>
                 <th class="p-4 border-b border-slate-200 bg-slate-50">
                     <p class="text-sm font-bold leading-none text-slate-500">
-                        Result
-                    </p>
-                </th>
-                <th class="p-4 border-b border-slate-200 bg-slate-50">
-                    <p class="text-sm font-bold leading-none text-slate-500">
                         Label
                     </p>
                 </th>
-                
+
             </tr>
         </thead>
         <tbody>
             {% if data|length == 0 %}
             <tr>
-                <td colspan="4" class="text-center py-6 text-gray-400 text-md font-medium">
+                <td colspan="3" class="text-center py-6 text-gray-400 text-md font-medium">
                     There's no data.
                 </td>
             </tr>
             {% else %}
+
             {% for tweet in data %}
             <tr class="hover:bg-slate-50 border-b border-slate-200">
                 <td class="p-4 py-5">
@@ -58,26 +61,23 @@
                     <p class="text-sm font-medium">{{ tweet.tweet }}</p>
                 </td>
                 <td class="p-4 py-5">
-                    <p class="text-sm font-medium">{{ tweet.result }}</p>
-                </td>
-                <td class="p-4 py-5">
                     <p class="text-sm font-medium">{{ tweet.label }}</p>
                 </td>
             </tr>
             {% endfor %}
             {% endif %}
-          
         </tbody>
-    </table>    
+    </table>
     <div class="flex justify-between items-center px-4 py-3">
         <div class="text-sm text-slate-500">
             Showing <b>{{ (pagination.page - 1) * pagination.per_page + 1 }} - {{ (pagination.page - 1) * pagination.per_page + data|length }}</b>
         of <b>{{ pagination.total }}</b>
         </div>
         <div class="flex space-x-1 mt-4 justify-center items-center">
+
             {# Prev Button #}
             {% if pagination.has_prev %}
-                <a href="{{ url_for('preprocessing_training', page=pagination.prev_num) }}">
+                <a href="{{ url_for('crawl', page=pagination.prev_num) }}">
                     <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-700 bg-white border-gray-300 hover:bg-gray-100">
                         Prev
                     </button>
@@ -93,7 +93,7 @@
                 {% if p == '...' %}
                     <span class="px-3 py-1 min-w-9 min-h-9 text-sm text-gray-400 select-none">...</span>
                 {% else %}
-                    <a href="{{ url_for('preprocessing_training', page=p) }}">
+                    <a href="{{ url_for('crawl', page=p) }}">
                         <button
                             class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded
                             {{ 'bg-[#2563EB] text-white border-[#2563EB]' if p == pagination.page else 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
@@ -105,7 +105,7 @@
         
             {# Next Button #}
             {% if pagination.has_next %}
-                <a href="{{ url_for('preprocessing_training', page=pagination.next_num) }}">
+                <a href="{{ url_for('crawl', page=pagination.next_num) }}">
                     <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-700 bg-white border-gray-300 hover:bg-gray-100">
                         Next
                     </button>

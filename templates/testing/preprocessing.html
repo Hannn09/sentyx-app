@@ -2,15 +2,20 @@
 
 {% block title %}Sentyx - Preprocessing Data{% endblock %}
 
+{% block header %}Preprocessing Data{% endblock %}
+
 {% block content %}
 <div class="flex flex-col space-y-8">
-    <h1 class="text-4xl font-bold tracking-tighter">Preprocessing Data</h1>
+  
 
-    <a href="#" class="text-white rounded-xl bg-[#2563EB] font-semibold py-4 px-6 w-fit hover:bg-blue-700">Preprocessing</a>
+    <form action="{{ url_for('process_preprocessing_testing') }}" method="get">
+        <button type="submit" class="text-white rounded-xl bg-[#2563EB] font-semibold py-4 px-6 w-fit hover:bg-blue-700 cursor-pointer mt-8">Preprocessing</button>
+    </form>
+
 </div>
 
 <div class="relative flex flex-col w-full h-fit overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border mt-8">
-    <table class="w-full text-left table-auto min-w-max">
+    <table class="w-full text-left table-auto min-w-full">
         <thead>
             <tr>
                 <th class="p-4 border-b border-slate-200 bg-slate-50">
@@ -23,46 +28,87 @@
                         Tweet
                     </p>
                 </th>    
+                <th class="p-4 border-b border-slate-200 bg-slate-50">
+                    <p class="text-sm font-bold leading-none text-slate-500">
+                        Result
+                    </p>
+                </th>    
             </tr>
         </thead>
         <tbody>
-            <tr class="hover:bg-slate-50 border-b border-slate-200">
-                <td class="p-4 py-5">
-                    <p class="block font-medium text-sm">1</p>
-                </td>
-                <td class="p-4 py-5">
-                    <p class="text-sm font-medium">Anjay aplikasi shopeepaylater berguna banget buat aku</p>
+            {% if data|length == 0 %}
+            <tr>
+                <td colspan="3" class="text-center py-6 text-gray-400 text-md font-medium">
+                    There's no data.
                 </td>
             </tr>
+            {% else %}
+            {% for tweet in data %}
+            <tr class="hover:bg-slate-50 border-b border-slate-200">
+                <td class="p-4 py-5">
+                    <p class="block font-medium text-sm">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</p>
+                </td>
+                <td class="p-4 py-5">
+                    <p class="text-sm font-medium">{{ tweet.tweet }}</p>
+                </td>
+                <td class="p-4 py-5">
+                    <p class="text-sm font-medium">{{ tweet.result }}</p>
+                </td>
+                
+            </tr>
+            {% endfor %}
+            {% endif %}
           
         </tbody>
     </table>    
     <div class="flex justify-between items-center px-4 py-3">
         <div class="text-sm text-slate-500">
-            Showing <b>1-5</b> of 45
+            Showing <b>{{ (pagination.page - 1) * pagination.per_page + 1 }} - {{ (pagination.page - 1) * pagination.per_page + data|length }}</b>
+        of <b>{{ pagination.total }}</b>
         </div>
-        <div class="flex space-x-1">
-            <button
-                class="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                Prev
-            </button>
-            <button
-                class="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-white bg-[#2563EB] border rounded hover:bg-slate-600 hover:border-slate-600 transition duration-200 ease">
-                1
-            </button>
-            <button
-                class="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                2
-            </button>
-            <button
-                class="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                3
-            </button>
-            <button
-                class="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                Next
-            </button>
+        <div class="flex space-x-1 mt-4 justify-center items-center">
+            {# Prev Button #}
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('preprocessing_testing', page=pagination.prev_num) }}">
+                    <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-700 bg-white border-gray-300 hover:bg-gray-100">
+                        Prev
+                    </button>
+                </a>
+            {% else %}
+                <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-400 bg-gray-100 cursor-not-allowed" hidden>
+                    Prev
+                </button>
+            {% endif %}
+        
+            {# Page Buttons with Ellipsis #}
+            {% for p in page_range %}
+                {% if p == '...' %}
+                    <span class="px-3 py-1 min-w-9 min-h-9 text-sm text-gray-400 select-none">...</span>
+                {% else %}
+                    <a href="{{ url_for('preprocessing_testing', page=p) }}">
+                        <button
+                            class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded
+                            {{ 'bg-[#2563EB] text-white border-[#2563EB]' if p == pagination.page else 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                            {{ p }}
+                        </button>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        
+            {# Next Button #}
+            {% if pagination.has_next %}
+                <a href="{{ url_for('preprocessing_testing', page=pagination.next_num) }}">
+                    <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-700 bg-white border-gray-300 hover:bg-gray-100">
+                        Next
+                    </button>
+                </a>
+            {% else %}
+                <button class="px-3 py-1 min-w-9 min-h-9 text-sm border rounded text-gray-400 bg-gray-100 cursor-not-allowed" disabled>
+                    Next
+                </button>
+            {% endif %}
         </div>
+        
     </div>
 </div>
 {% endblock %}

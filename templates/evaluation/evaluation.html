@@ -1,0 +1,49 @@
+{% extends "layout/index.html" %}
+
+{% block title %}Sentyx - Evaluation Model{% endblock %}
+
+{% block header %}Evaluation Model{% endblock %}
+
+{% block content %}
+<div class="flex flex-col space-y-5">
+    <div class="">
+
+        <form action="{{ url_for('evaluation_process') }}" method="post">
+            <div class="mt-8 space-y-5">
+                <div class="max-w-sm">
+                    <label for="ratio" class="block mb-2 text-base font-medium text-gray-900 ">Choose Split Data</label>
+                    <select id="ratio" name="ratio"
+                        class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option selected disabled>Choose a ratio</option>
+                        <option value="70:30">70% Training 30% Testing</option>
+                        <option value="75:25">75% Training 25% Testing</option>
+                        <option value="80:20">80% Training 20% Testing</option>
+                        <option value="85:15">85% Training 15% Testing</option>
+                        <option value="90:10">90% Training 10% Testing</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="bg-[#2563EB] text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
+                    Training Dataset
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if confusion_matrix %}
+    <div>
+        <h2 class="text-xl font-semibold mb-2">Evaluation Result for {{ selected_ratio }} </h2>
+
+        <p><strong>Accuracy:</strong> {{ '{:.2f}'.format(accuracy * 100) }}%</p>
+        <p><strong>Precision:</strong> {{ '{:.2f}'.format(precision * 100) }}%</p>
+        <p><strong>Recall:</strong> {{ '{:.2f}'.format(recall * 100) }}%</p>
+
+        <h3 class="mt-4 font-semibold">Confusion Matrix :</h3>
+        <img src="data:image/png;base64,{{ confusion_matrix }}" alt="Confusion Matrix" class="mt-2 border rounded shadow">
+    </div>
+    {% endif %}
+    
+</div>
+
+
+{% endblock %}

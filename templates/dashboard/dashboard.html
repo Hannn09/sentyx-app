@@ -2,17 +2,17 @@
 
 {% block title %}Sentyx - Dashboard{% endblock %}
 
+{% block header %}Dashboard{% endblock %}
+
 {% block content %}
-<div class="flex justify-between items-center">
-    <h1 class="text-4xl font-bold tracking-tighter">Dashboard</h1>       
-</div>
+ 
  <!-- Card -->
  <div class="flex md:flex-row flex-col mt-12 gap-3">
     <!-- Card 1 -->
     <div
-        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between w-full sm:w-1/2 lg:w-1/4 shadow-md">
+        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between w-full md:w-1/2 lg:w-1/4 shadow-md">
         <div class="flex space-x-3 items-center">
-            <div class="text-3xl font-bold leading-none">0</div>
+            <div class="text-3xl font-bold leading-none">{{ trainingCount }}</div>
             <div class="flex flex-col">
                 <div class="text-sm font-medium">Total</div>
                 <div class="text-sm font-medium ">Data Training</div>
@@ -27,9 +27,9 @@
     </div>
     <!-- Card 2 -->
     <div
-        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full sm:w-1/2 lg:w-1/4 shadow-md">
+        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full md:w-1/2 lg:w-1/4 shadow-md">
         <div class="flex space-x-3 items-center">
-            <div class="text-3xl font-bold leading-none">0</div>
+            <div class="text-3xl font-bold leading-none">{{ testingCount }}</div>
             <div class="flex flex-col">
                 <div class="text-sm font-medium">Total</div>
                 <div class="text-sm font-medium ">Data Testing</div>
@@ -44,12 +44,12 @@
     </div>
     <!-- Card 3 -->
     <div
-        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full sm:w-1/2 lg:w-1/4 shadow-md">
+        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full md:w-1/2 lg:w-1/4 shadow-md">
         <div class="flex space-x-3 items-center">
-            <div class="text-3xl font-bold leading-none">0</div>
+            <div class="text-3xl font-bold leading-none">{{ positifCount }}</div>
             <div class="flex flex-col">
                 <div class="text-sm font-medium">Total</div>
-                <div class="text-sm font-medium ">Sentimen Positif</div>
+                <div class="text-sm font-medium ">Sentiment Positive</div>
             </div>
         </div>
         <div>
@@ -61,12 +61,12 @@
     </div>
     <!-- Card 4 -->
     <div
-        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full sm:w-1/2 lg:w-1/4 shadow-md">
+        class="bg-[#2563EB] text-white rounded-xl px-4 py-6 flex items-center justify-between  w-full md:w-1/2 lg:w-1/4 shadow-md">
         <div class="flex space-x-3 items-center">
-            <div class="text-3xl font-bold leading-none">0</div>
+            <div class="text-3xl font-bold leading-none">{{ mixedCount }}</div>
             <div class="flex flex-col">
                 <div class="text-sm font-medium">Total</div>
-                <div class="text-sm font-medium ">Sentimen Negatif & Netral</div>
+                <div class="text-sm font-medium ">Negative + Netral</div>
             </div>
         </div>
         <div>
@@ -89,6 +89,10 @@
                 </div>
             </div>
         </div>
+        <div id="sentiment-data"
+            data-positif="{{ positifPercent }}"
+            data-negatif="{{ negatifPercent }}"
+            data-netral="{{ netralPercent }}"></div>
         <div class="py-4" id="pie-chart"></div>
     </div>
 
@@ -100,6 +104,12 @@
                     <h5 class="text-xl font-bold tracking-tighter text-[#1F2937] me-1">Sentiment Trends</h5>
                 </div>
             </div>
+        </div>
+        <div id="line-chart-data"
+            data-years='{{ years | tojson }}'
+            data-positif='{{ positifCountsYear | tojson }}'
+            data-negatif='{{ negatifCountsYear | tojson }}'
+            data-netral='{{ netralCountsYear | tojson }}'>
         </div>
         <div id="labels-chart" class="px-2.5"></div>
     </div>
@@ -129,22 +139,35 @@
             </tr>
         </thead>
         <tbody>
+            {% if topWords|length == 0 %}
+            <tr>
+                <td colspan="4" class="text-center py-6 text-gray-400 text-md font-medium">
+                    There's no data.
+                </td>
+            </tr>
+            {% else %}
+            {% for word, score in topWords %}
             <tr class="bg-white ">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                    1
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {{ loop.index }}
                 </th>
                 <td class="px-6 py-4">
-                    Black
+                    {{ word }}
                 </td>
                 <td class="px-6 py-4">
                     <div class="w-full bg-gray-200 rounded-full h-2.5 ">
-                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width:  {{ (score * 100) | round(2) }}%"></div>
                       </div>
+                    <!-- {{ score }} -->
                 </td>
                 <td class="px-6 py-4">
-                    <div class="w-full max-w-15 border border-[#0095FF] rounded-lg bg-[#F0F9FF] text-[#0095FF] text-center px-3 py-1 font-semibold">45%</div>
+                    <div class=" max-w-5 border border-[#0095FF] rounded-lg bg-[#F0F9FF] text-[#0095FF] text-center px-3 py-1 font-semibold">
+                        {{ (score * 100) | round(2) }}%
+                    </div>
                 </td>
             </tr>
+            {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 </div>

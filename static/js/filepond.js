@@ -1,5 +1,5 @@
 const dropArea = document.getElementById('drop-area');
-const fileElem = document.getElementById('fileElem');
+const fileElem = document.getElementById('file_tweet');
 const filePreview = document.getElementById('file-preview');
 const fileName = document.getElementById('file-name');
 const fileSize = document.getElementById('file-size');

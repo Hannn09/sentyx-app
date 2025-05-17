@@ -2,39 +2,56 @@
 
 {% block title %}Sentyx - Classification{% endblock %}
 
+{% block header %}Sentence Checker{% endblock %}
+
 {% block content %}
 
-<h1 class="text-4xl font-bold tracking-tighter">Sentence Checker</h1>
 
-<div class="mt-8 space-y-5">
-    <div>
-        <textarea class="w-full border p-3 rounded-lg" rows="4" placeholder="Type a sentence to analyze..."></textarea>
-        <p class="text-gray-500 text-sm">e.g. "Aplikasi ini sangat bagus dan memudahkan dalam bertransaksi"</p>
+
+<form action="{{ url_for('sentence') }}" method="post">
+    <div class="mt-8 space-y-5">
+        <div>
+            <textarea class="w-full border p-3 rounded-lg" rows="4" placeholder="Type a sentence to analyze..." id="sentence" name="sentence"></textarea>
+            <p class="text-gray-500 text-sm">e.g. "Aplikasi ini sangat bagus dan memudahkan dalam bertransaksi"</p>
+        </div>
+        <button type="submit" class="bg-[#2563EB] text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
+            Analyze Sentiment
+        </button>
     </div>
-    <button type="submit" class="bg-[#2563EB] text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
-        Analyze Sentiment
-    </button>
-</div>
+</form>
 
 <!-- Result Section  -->
 <h2 class="text-2xl font-bold mt-10">Result</h2>
 <!-- Result Card -->
 <div class="mt-4 p-6 rounded-xl shadow-md bg-white border max-w-xl transition-all duration-300 ease-in-out hover:shadow-lg">
+    {% if result %}
     <div class="flex items-center justify-between mb-4">
         <div class="text-lg font-semibold text-gray-800">Sentiment Analysis Result</div>
-        <span class="inline-flex items-center gap-2 text-sm font-medium px-3 py-1 rounded-full bg-green-100 text-green-700">
-        Positive
+        <span class="inline-flex items-center gap-2 text-sm capitalize font-medium px-3 py-1 rounded-full 
+        {% if result == 'positif' %}
+        bg-green-100 text-green-700
+        {% elif result == 'negatif' %}
+        bg-red-100 text-red-700
+        {% elif result == 'netral' %}
+        bg-yellow-100 text-yellow-700
+        {% endif %}
+        ">
+        {{ result.capitalize() }}
         </span>
     </div>
     <p class="text-gray-600 text-sm mb-2">
-        <strong>Confidence:</strong> 92%
+        <strong>Accuracy:</strong> 92%
     </p>
     <p class="text-gray-600 text-sm mb-2">
-        <strong>Keywords:</strong> <span class="text-blue-600">mudahkan</span>, <span class="text-blue-600">bagus</span>
+        <strong>Keywords:</strong>  
+        {% for kw in keywords %}
+            <span class="text-blue-600">{{ kw }}</span>{% if not loop.last %}, {% endif %}
+        {% endfor %}
     </p>
     <div class="mt-4 text-gray-500 text-sm italic">
-        "Aplikasi ini sangat bagus dan memudahkan dalam bertransaksi"
+        "{{ preprocessing }}"
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}
