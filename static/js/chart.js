@@ -95,7 +95,7 @@ const options = {
     },
     yaxis: {
         min: 0,
-        max: 30,
+        max: 200,
       show: true,
       labels: {
         show: true,

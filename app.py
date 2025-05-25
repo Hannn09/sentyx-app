@@ -127,15 +127,21 @@ def dashboard():
     # group all result
     text_corpus = ' '.join([item[0] for item in preprocessing_training if item[0]])
 
-    # word cloud
-    wc = WordCloud(stopwords=None, background_color='white')
-    wc.generate(text_corpus)
+    # check word cloud
+    if text_corpus.strip():
+            # word cloud
+            wc = WordCloud(stopwords=None, background_color='white')
+            wc.generate(text_corpus)
 
-    # get frequency of words
-    frequency = wc.words_
+            # get frequency of words
+            frequency = wc.words_
 
-    # Get top 10 words
-    top_words = Counter(frequency).most_common(3)
+            # Get top 10 words
+            top_words = Counter(frequency).most_common(3)
+    else:
+        wc = None
+        top_words = [('paylater', 0.12), ('shopee', 0.10), ('gopay', 0.08)]
+
 
     return render_template('dashboard/dashboard.html', active_page='dashboard', trainingCount=trainingCount, testingCount=testingCount, positifCount=positifCount, mixedCount=mixedCount, positifPercent=positif_percent, negatifPercent=negatif_percent, netralPercent=netral_percent, positifCountsYear=positif_counts_year, negatifCountsYear=negatif_counts_year, netralCountsYear=netral_counts_year, years=years, topWords=top_words)
 
@@ -287,7 +293,7 @@ def process_classification_training():
     
     # Load data from PreprocessingTraining
     result_preprocessing = [item.result for item in data]
-    label = [item.label for item in data]
+    label = [item.label.strip().lower() for item in data]
     tweet  = [item.tweet for item in data]
     slug = [item.slug for item in data]
 
@@ -321,18 +327,19 @@ def process_classification_training():
     print(classification_report(y_test, prediction, target_names=['positif', 'negatif', 'netral']))
     print("Classification Accuracy: ", classifier.score(x_test, y_test))
 
-    for t, prediction_label, s in zip(tweet_test, prediction, slug_test):
+    for t, prediction_label, true_label ,s in zip(tweet_test, prediction, y_test, slug_test):
         label_name = str(label_encoder.inverse_transform([prediction_label])[0])
+        true_label_name = str(label_encoder.inverse_transform([true_label])[0])
         # Find similar slug
         existing_slug = session.query(ClassificationTraining).filter_by(slug=s).first()
 
         if existing_slug:
             existing_slug.slug = s
             existing_slug.tweet = t
-            existing_slug.label = label_name    
+            existing_slug.label = true_label_name    
             existing_slug.result_classification = label_name    
         else:
-            processed = ClassificationTraining(tweet=t, label=label_name, slug=s, result_classification=label_name)
+            processed = ClassificationTraining(tweet=t, label=true_label_name, slug=s, result_classification=label_name)
             session.add(processed)
 
     session.commit()

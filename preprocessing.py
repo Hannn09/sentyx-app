@@ -49,7 +49,7 @@ normalisasi_dict = {
     "tanpa": "tidak dengan", "terima": "menerima", "karena": "sebab", "gue" : "saya", "kalo": "kalau", "yg": "yang", "pake": "menggunakan",
     "knp" : "kenapa", "tiap": "setiap", "klik": "tekan", "bahaya": "berisiko", "buat": "untuk", "bisa": "dapat", "bisa aja": "mungkin",
     "emang": "memang", "beda" : "berbeda", "ngebantu": "membantu",  "lumayan": "cukup",  "nyari": "mencari", "sampai": "hingga", "inget": "ingat",
-    "tetep": "tetap", "cuma": "hanya", "biar" : "agar", "ngotak" : "masuk akal"
+    "tetep": "tetap", "cuma": "hanya", "biar" : "agar", "ngotak" : "masuk akal", "dgn" : "dengan"
 }
 def normalize(text):
     return [normalisasi_dict.get(word, word) for word in text]

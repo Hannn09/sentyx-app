@@ -56,11 +56,12 @@
                     <p class="text-sm font-medium">{{ tweet.tweet }}</p>
                 </td>
                 <td class="p-4 py-5">
-                    <p class="text-sm font-medium">{{ tweet.result_classification }}</p>
-                </td>
-                <td class="p-4 py-5">
                     <p class="text-sm font-medium">{{ tweet.label }}</p>
                 </td>
+                <td class="p-4 py-5">
+                    <p class="text-sm font-medium">{{ tweet.result_classification }}</p>
+                </td>
+               
             </tr>
             {% endfor %}
             {% endif %}
