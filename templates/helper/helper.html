@@ -1,0 +1,138 @@
+{% extends "layout/index.html" %}
+
+{% block title %}Sentyx - Helper{% endblock %}
+
+{% block header %}Helper{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <div class="max-w-5xl mx-auto space-y-10">
+        <!-- Title -->
+        <div class="mb-4">
+            <p class="text-gray-600 mt-2">Berikut adalah langkah-langkah untuk menggunakan aplikasi Sentyx</p>
+        </div>
+
+        <!-- Section: Data Training -->
+        <div>
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">📊 Data Training</h2>
+
+            <!-- Import Data -->
+            <div class="bg-white p-5 rounded-xl shadow-md mb-6 space-y-4">
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">1. Import Data</h3>
+                    <p class="text-gray-600 mb-2">Untuk memulai proses training, kamu harus mengunggah data terlebih
+                        dahulu dalam format <strong>.CSV</strong>. File ini harus memiliki kolom minimal:
+                        <code>tweet</code> dan <code>label</code>.</p>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Buka menu <strong>Data Training → Import Data</strong>.</li>
+                        <li>Klik tombol “Import Dataset” dan unggah file CSV yang valid.</li>
+                    </ul>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">2. Preprocessing</h3>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Setelah data berhasil diunggah, buka menu <strong>Data Training → Preprocessing </strong>
+                        </li>
+                        <li>Klik tombol “Preprocessing” untuk membersihkan dan mempersiapkan data (proses ini memakan
+                            waktu sekitar 5-10 menit)</li>
+                    </ul>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">3. Classification Result</h3>
+                    <p class="text-gray-600">Setelah preprocessing selesai, kamu buka menu <strong>Data Training →
+                            Classification Resutl</strong> untuk menjalankan klasifikasi sentimennya.</p>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Klik tombol “Classification” untuk mengklasifikasikan data yang sudah diunggah</li>
+                        <li>Kamu bisa melihat hasil prediksi dari sistem apakah tweet tersebut bersentimen positif,
+                            negatif, atau netral.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Section: Data Testing -->
+        <div>
+            <h2 class="text-2xl font-semibold text-blue-700 mt-10 mb-4">🧪 Data Testing</h2>
+
+            <!-- Import Data -->
+            <div class="bg-white p-5 rounded-xl shadow-md mb-6 space-y-4">
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">1. Import Data</h3>
+                    <p class="text-gray-600 mb-2">Sama seperti training, upload file <strong>.CSV</strong> untuk data
+                        testing yang hanya berisi kolom <code>tweet</code>.</p>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Buka menu <strong>Data Testing → Import Data</strong>.</li>
+                        <li>Klik tombol “Import Dataset” dan unggah file CSV yang valid.</li>
+                    </ul>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">2. Preprocessing</h3>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Setelah data berhasil diunggah, buka menu <strong>Data Testing → Preprocessing </strong>
+                        </li>
+                        <li>Klik tombol “Preprocessing” untuk membersihkan dan mempersiapkan data (proses ini memakan
+                            waktu sekitar 5-10 menit)</li>
+                    </ul>
+
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">3. Classification Result</h3>
+                    <ul class="list-disc ml-6 text-gray-600">
+                        <li>Klik tombol “Classification” untuk mengklasifikasikan data yang sudah diunggah</li>
+                        <li>Kamu bisa melihat hasil prediksi dari sistem apakah tweet tersebut bersentimen positif,
+                            negatif, atau netral.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Sentence Checker-->
+        <div>
+            <h2 class="text-2xl font-semibold text-blue-700 mt-10 mb-4">🔎 Sentence Checker</h2>
+
+            <div class="bg-white p-5 rounded-xl shadow-md mb-6 space-y-4">
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">1. Masukkan Kalimat</h3>
+                    <p class="text-gray-600">Pada kolom yang tersedia, ketikkan satu kalimat atau lebih yang ingin kamu
+                        analisis. Contoh: <em>"Aplikasi ini sangat membantu dan mudah digunakan"</em>.</p>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">2. Klik Tombol Analyze Sentiment</h3>
+                    <p class="text-gray-600">Setelah memasukkan kalimat, klik tombol <strong>"Analyze
+                            Sentiment"</strong>. Sistem akan memproses inputanmu dan menampilkan hasilnya di bawah.</p>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">3. Lihat Hasil Klasifikasi</h3>
+                    <p class="text-gray-600">Hasil sentimen dan akurasi prediksi akan muncul pada bagian
+                        <strong>Result</strong> di bawah form. Kamu akan melihat label: <code>Positif</code>,
+                        <code>Negatif</code>, atau <code>Netral</code> berdasarkan kalimat yang dimasukkan.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Crawl Tweet-->
+        <div>
+            <h2 class="text-2xl font-semibold text-blue-700 mt-10 mb-4">🔗 Crawling Tweet</h2>
+
+            <div class="bg-white p-5 rounded-xl shadow-md mb-6 space-y-4">
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">1. Masukkan Kata Kunci</h3>
+                    <p class="text-gray-600">Ketikkan kata kunci pada kolom input, misalnya <code>shopeepaylater</code>,
+                        <code>gopaylater</code>, atau topik lain yang ingin kamu analisis.</p>
+                    <p class="text-gray-600">Contoh: <em>e.g. shopeepaylater, gopaylater</em></p>
+                </div>
+                <div class="">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">2. Klik Tombol Search</h3>
+                    <p class="text-gray-600">Setelah memasukkan keyword, klik tombol <strong>Search</strong>. Sistem
+                        akan terhubung dengan Twitter untuk mengambil tweet publik terkait keyword tersebut.</p>
+                    <p class="text-gray-600">Tweet akan langsung diproses dan diklasifikasikan sebagai
+                        <code>positif</code>, <code>negatif</code>, atau <code>netral</code>.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {% endblock %}

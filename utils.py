@@ -21,9 +21,9 @@ def get_pagination_range(current_page, total_pages, delta=2):
 
 
 # Generate image confusion matrix
-def generate_confusion_matrix(y_true, y_pred, labels=None):
+def generate_confusion_matrix(y_true, y_pred, labels=None, display_labels=None):
     fig, ax = plt.subplots(figsize=(5, 5))
-    disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, ax=ax, cmap="Blues", colorbar=False, display_labels=labels)
+    disp = ConfusionMatrixDisplay.from_predictions(y_true, y_pred, ax=ax, cmap="Blues", colorbar=False, labels=labels ,display_labels=display_labels)
     disp.ax_.set_title("Confusion Matrix")
     disp.ax_.set_xlabel("Predicted Label")
     disp.ax_.set_ylabel("True Label")

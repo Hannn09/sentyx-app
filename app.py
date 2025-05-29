@@ -16,6 +16,7 @@ from sklearn.svm import SVC
 from sklearn.metrics import classification_report, confusion_matrix,  accuracy_score, precision_score, recall_score, f1_score
 from collections import defaultdict, Counter
 from wordcloud import WordCloud
+from datetime import datetime
 
 import os
 import subprocess
@@ -23,6 +24,8 @@ import emoji
 import pandas as pd
 import mysql.connector
 import pickle
+import re
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -62,7 +65,7 @@ def load_user(user_id):
     return UserModel.query.get(int(user_id))
 
 # Routes
-@app.route('/')
+@app.route('/dashboard')
 @login_required
 def dashboard():
     # Count data Testing and Training
@@ -107,14 +110,12 @@ def dashboard():
 
     # Get year timestamp in training data
     for label, timestamp in training_data:
-       if timestamp and len(timestamp) >= 4:
-            try:
-                # Get last 4 digits in timestamp
-                year = timestamp[-4:]
-                if label in sentiment_by_year[year]:
-                    sentiment_by_year[year][label] += 1
-            except:
-                continue
+        try:
+            dt = datetime.strptime(timestamp, "%a %b %d %H:%M:%S %z %Y")
+            year = str(dt.year)
+            sentiment_by_year[year][label] += 1
+        except Exception as e:
+            continue
     
     years = sorted(sentiment_by_year.keys())
     positif_counts_year = [sentiment_by_year[year]['positif'] for year in years]
@@ -142,8 +143,12 @@ def dashboard():
         wc = None
         top_words = [('paylater', 0.12), ('shopee', 0.10), ('gopay', 0.08)]
 
-
     return render_template('dashboard/dashboard.html', active_page='dashboard', trainingCount=trainingCount, testingCount=testingCount, positifCount=positifCount, mixedCount=mixedCount, positifPercent=positif_percent, negatifPercent=negatif_percent, netralPercent=netral_percent, positifCountsYear=positif_counts_year, negatifCountsYear=negatif_counts_year, netralCountsYear=netral_counts_year, years=years, topWords=top_words)
+
+@app.route('/')
+@login_required
+def helper():
+    return render_template('helper/helper.html', active_page='helper')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -155,7 +160,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             flash("Login successful!", "success")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('helper'))
         else:
             flash("Invalid email or password", "error")
             return redirect(url_for('login'))
@@ -165,16 +170,26 @@ def login():
 @app.route('/register', methods=['GET','POST'])
 def register():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        name = request.form.get('name', '').strip()
+        email = request.form.get('email', '').strip()
+        password_raw = request.form.get('password', '')
+        
 
+        if not name or not email or not password_raw:
+            flash("All field are required!", "error")
+            return redirect(url_for('register'))
+        
+        if UserModel.query.filter_by(email=email).first():
+            flash("Email already exists!", "error")
+            return redirect(url_for('register'))
+        
+        password = bcrypt.generate_password_hash(password_raw).decode('utf-8')
         user = UserModel(name=name, email=email, password=password)
         session.add(user)
         session.commit()
-
         flash("Registration successful. Please log in.", "success")
         return redirect(url_for('login'))
+        
     return render_template('auth/register.html')
 
 @app.route('/logout')
@@ -337,7 +352,7 @@ def process_classification_training():
             existing_slug.slug = s
             existing_slug.tweet = t
             existing_slug.label = true_label_name    
-            existing_slug.result_classification = label_name    
+            existing_slug.result_classification = label_name   
         else:
             processed = ClassificationTraining(tweet=t, label=true_label_name, slug=s, result_classification=label_name)
             session.add(processed)
@@ -551,12 +566,12 @@ def sentence():
         top_keywords = [kw[0] for kw in keyword_weights[:3]]
 
         # Load accuracy
-        # with open("static/model/svm_accuracy.txt", "r") as f:
-        #     accuracy = f.read()
-        # accuracy = float(accuracy) * 100
+        with open("static/model/svm_accuracy.txt", "r") as f:
+            accuracy = f.read()
+        accuracy = round(float(accuracy) * 100, 2)
 
 
-        return render_template('sentence/sentence.html', active_page='sentence', text=text, result=label_name, keywords=top_keywords, preprocessing=result_text)
+        return render_template('sentence/sentence.html', active_page='sentence', text=text, result=label_name, keywords=top_keywords, preprocessing=result_text, accuracy=accuracy)
 
     return render_template('sentence/sentence.html', active_page='sentence')
 
@@ -596,6 +611,10 @@ def crawl_tweet():
         df['full_text'] = df['full_text'].fillna('').astype(str)
         for _, row in df.iterrows():
             tweet = row['full_text']
+            
+            blacklist_keywords = ['giveaway', 'give away', 'promo', 'diskon', 'gratis', 'like & rt']
+            if any(re.search(rf'\b{re.escape(word)}\b', tweet, re.IGNORECASE) for word in blacklist_keywords):
+                continue
 
             # Preprocessing
             casefolding_text = casefolding(tweet)
@@ -634,7 +653,12 @@ def evaluation():
 @app.route('/evaluation-process', methods=['POST'])
 @login_required
 def evaluation_process():
-    ratio = request.form['ratio']
+    ratio = request.form.get('ratio')
+
+    if not ratio:
+        flash("Please choose a data split ratio.", "error")
+        return redirect(url_for('evaluation'))
+
     # Split and covert to int ratio 
     train_ratio = int (ratio.split(':')[0]) / 100
     test_ratio = 1 - train_ratio
@@ -642,7 +666,7 @@ def evaluation_process():
     # Load data from PreprocessingTraining
     data = PreprocessingTraining.query.all()
     result_preprocessing = [item.result for item in data]
-    label = [item.label for item in data]
+    label = [item.label.strip().lower() for item in data]
 
     # TF-IDF Vectorization
     vectorizer = TfidfVectorizer()
@@ -653,7 +677,7 @@ def evaluation_process():
     y = label_encoder.fit_transform(label)
 
     # Split data
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_ratio, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_ratio, random_state=42, stratify=y)
 
     # SVM Classifier
     classifier = SVC(kernel='linear', probability=True)
@@ -664,7 +688,9 @@ def evaluation_process():
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average='weighted')
     recall = recall_score(y_test, y_pred, average='weighted')
-    cm = generate_confusion_matrix(y_test, y_pred, labels=label_encoder.classes_)
+    label_test = np.unique(np.concatenate([y_test, y_pred]))
+    actual_label = label_encoder.inverse_transform(label_test)
+    cm = generate_confusion_matrix(y_test, y_pred, labels=label_test, display_labels=actual_label)
 
     return render_template('evaluation/evaluation.html', active_page='evaluation', accuracy=accuracy, precision=precision, recall=recall, confusion_matrix=cm, selected_ratio=ratio)
 

@@ -5,13 +5,10 @@
 {% block header %}Sentence Checker{% endblock %}
 
 {% block content %}
-
-
-
 <form action="{{ url_for('sentence') }}" method="post">
     <div class="mt-8 space-y-5">
         <div>
-            <textarea class="w-full border p-3 rounded-lg" rows="4" placeholder="Type a sentence to analyze..." id="sentence" name="sentence"></textarea>
+            <textarea class="w-full border p-3 rounded-lg" rows="4" placeholder="Type a sentence to analyze..." id="sentence" name="sentence" required></textarea>
             <p class="text-gray-500 text-sm">e.g. "Aplikasi ini sangat bagus dan memudahkan dalam bertransaksi"</p>
         </div>
         <button type="submit" class="bg-[#2563EB] text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
@@ -40,7 +37,7 @@
         </span>
     </div>
     <p class="text-gray-600 text-sm mb-2">
-        <strong>Accuracy:</strong> 92%
+        <strong>Accuracy:</strong> {{ accuracy }}%
     </p>
     <p class="text-gray-600 text-sm mb-2">
         <strong>Keywords:</strong>  

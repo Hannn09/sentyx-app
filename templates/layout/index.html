@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <div x-data="{ sidebarOpen: false }" class="flex min-h-screen flex-col md:flex-row bg-[#FAFBFC]">
+    <div x-data="{ sidebarOpen: false, openModal: false }" class="flex h-screen flex-col md:flex-row bg-[#FAFBFC]">
         <!-- Navbar Mobile -->
         <div class="md:hidden bg-white p-4 ">
             <button @click="sidebarOpen = !sidebarOpen" class="bg-indigo-500 text-white p-2 rounded-lg">
@@ -108,184 +108,207 @@
             class="fixed inset-0 z-40 bg-black/10 backdrop-blur-sm md:hidden"></div>
 
         <!-- Sidebar -->
-        <div :class="sidebarOpen ?  'translate-x-0' : '-translate-x-full'"
+        <aside :class="sidebarOpen ?  'translate-x-0' : '-translate-x-full'"
             class="fixed inset-y-0 left-0 w-80 bg-white p-5 z-50 transition-transform duration-300 ease-in-out overflow-y-auto md:relative md:translate-x-0 md:h-auto">
 
-            <div class="flex gap-5 items-center">
-                <a href="#"><img src="{{ url_for('static', filename='assets/logo.png') }}" class="w-[3.5rem]"
-                        alt="Logo"></a>
-                <span class="font-bold text-3xl tracking-tighter">Sentyx</span>
-            </div>
+            <div class="flex flex-col justify-between h-full">
+                <div class="">
+                    <div class="flex gap-5 items-center">
+                        <a href="#"><img src="{{ url_for('static', filename='assets/logo.png') }}" class="w-[3.5rem]"
+                                alt="Logo"></a>
+                        <span class="font-bold text-3xl tracking-tighter">Sentyx</span>
+                    </div>
 
-            <div class="mt-10 space-y-4">
-                <a href="{{ url_for('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+                    <div class="mt-10 space-y-4">
+                        <a href="{{ url_for('helper') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+                    {% if active_page == 'helper' %}
+                        bg-[#2563EB] text-white
+                    {% else %}
+                        text-[#1F2937] hover:bg-[#DCDDDF]
+                    {% endif %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+                                <path fill="currentColor" fill-rule="evenodd"
+                                    d="M334.434 206.171c0 13.516-3.435 25.318-10.288 35.397c-5.65 8.47-15.12 17.649-28.436 27.534c-7.664 5.247-12.711 10.184-15.126 14.823c-3.04 5.648-4.54 14.113-4.54 25.409h-42.666c0-17.137 1.824-29.64 5.454-37.504c4.23-9.483 13.407-19.064 27.521-28.743c6.664-5.045 11.503-10.183 14.529-15.425c3.625-5.852 5.449-12.503 5.449-19.966c0-11.899-3.539-20.766-10.594-26.624c-5.636-4.228-12.502-6.345-20.569-6.345c-13.108 0-22.59 4.339-28.436 13.009c-4.236 6.45-6.36 14.719-6.36 24.8v.304h-45.361c0-26.422 8.36-46.382 25.09-59.898c14.12-11.283 31.574-16.94 52.34-16.94c18.16 0 34.092 3.533 47.798 10.588c22.803 11.703 34.195 31.572 34.195 59.581m134.9 49.83c0 117.82-95.513 213.333-213.334 213.333c-117.82 0-213.333-95.513-213.333-213.334S138.18 42.667 256 42.667S469.334 138.179 469.334 256m-42.667 0c0-94.107-76.561-170.667-170.667-170.667S85.334 161.894 85.334 256S161.894 426.667 256 426.667S426.667 350.106 426.667 256m-170.668 69.333c-14.728 0-26.667 11.938-26.667 26.666s11.94 26.667 26.667 26.667s26.667-11.939 26.667-26.667s-11.94-26.666-26.667-26.666" />
+                            </svg>
+                            <span class="text-base font-bold">Helper</span>
+                        </a>
+
+                        <a href="{{ url_for('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
                     {% if active_page == 'dashboard' %}
                         bg-[#2563EB] text-white
                     {% else %}
                         text-[#1F2937] hover:bg-[#DCDDDF]
                     {% endif %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                            d="M4 13h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1m-1 7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1zm10 0a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1zm1-10h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1" />
-                    </svg>
-                    <span class="text-base font-bold">Dashboard</span>
-                </a>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M4 13h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1m-1 7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1zm10 0a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1zm1-10h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1" />
+                            </svg>
+                            <span class="text-base font-bold">Dashboard</span>
+                        </a>
 
-                <div x-data="{ open: {{ 'true' if active_page in ['import_training', 'preprocessing_training', 'classification_training'] else 'false' }} }"
-                    class="text-[#1F2937]">
-                    <div @click="open = !open"
-                        class="flex items-center gap-3 cursor-pointer hover:bg-[#DCDDDF] px-4 py-3 rounded-lg transition-all duration-300 ease-in-out">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="#1F2937" fill-rule="evenodd"
-                                d="M9 21.072h12c.41 0 .75-.34.75-.75s-.34-.75-.75-.75H8.999c-2.62 0-3.929 0-4.589-.66s-.66-1.97-.66-4.59v-10c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10c0 3.03 0 4.55 1.1 5.65s2.62 1.1 5.649 1.1zm-3.53-6.22c.15.15.34.22.53.22s.38-.07.53-.22l3.25-3.25c.48-.48.83-.83 1.02-.88c.13-.04.26-.04.41 0c.18.05.53.4 1.01.88c.72.72 1.11 1.11 1.66 1.26c.41.12.84.12 1.23 0c.56-.15.95-.54 1.67-1.26l3.75-3.75c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0l-3.75 3.75l-.002.001c-.48.48-.829.83-1.019.88c-.13.04-.26.04-.41 0c-.18-.05-.529-.4-1.008-.88h-.002c-.72-.72-1.11-1.11-1.66-1.26c-.41-.12-.84-.12-1.23 0c-.56.15-.95.54-1.67 1.26l-3.25 3.25c-.29.29-.29.77 0 1.06"
-                                color="#1F2937" /></svg>
-                        <span class="text-base font-bold">Data Training</span>
-                        <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 ml-auto transition-transform" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="#1F2937" stroke-width="2" d="M6 9l6 6 6-6" /></svg>
-                    </div>
-                    <div x-show="open" x-transition class="ml-10 mt-4 space-y-5">
-                        <a href="{{ url_for('import_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                        <div x-data="{ open: {{ 'true' if active_page in ['import_training', 'preprocessing_training', 'classification_training'] else 'false' }} }"
+                            class="text-[#1F2937]">
+                            <div @click="open = !open"
+                                class="flex items-center gap-3 cursor-pointer hover:bg-[#DCDDDF] px-4 py-3 rounded-lg transition-all duration-300 ease-in-out">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#1F2937" fill-rule="evenodd"
+                                        d="M9 21.072h12c.41 0 .75-.34.75-.75s-.34-.75-.75-.75H8.999c-2.62 0-3.929 0-4.589-.66s-.66-1.97-.66-4.59v-10c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10c0 3.03 0 4.55 1.1 5.65s2.62 1.1 5.649 1.1zm-3.53-6.22c.15.15.34.22.53.22s.38-.07.53-.22l3.25-3.25c.48-.48.83-.83 1.02-.88c.13-.04.26-.04.41 0c.18.05.53.4 1.01.88c.72.72 1.11 1.11 1.66 1.26c.41.12.84.12 1.23 0c.56-.15.95-.54 1.67-1.26l3.75-3.75c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0l-3.75 3.75l-.002.001c-.48.48-.829.83-1.019.88c-.13.04-.26.04-.41 0c-.18-.05-.529-.4-1.008-.88h-.002c-.72-.72-1.11-1.11-1.66-1.26c-.41-.12-.84-.12-1.23 0c-.56.15-.95.54-1.67 1.26l-3.25 3.25c-.29.29-.29.77 0 1.06"
+                                        color="#1F2937" /></svg>
+                                <span class="text-base font-bold">Data Training</span>
+                                <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 ml-auto transition-transform"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke="#1F2937" stroke-width="2" d="M6 9l6 6 6-6" /></svg>
+                            </div>
+                            <div x-show="open" x-transition class="ml-10 mt-4 space-y-5">
+                                <a href="{{ url_for('import_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'import_training' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Import
-                            Data</a>
-                        <a href="{{ url_for('preprocessing_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                                    Data</a>
+                                <a href="{{ url_for('preprocessing_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'preprocessing_training' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Preprocessing</a>
-                        <a href="{{ url_for('classification_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                                <a href="{{ url_for('classification_training') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'classification_training' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Classification Result</a>
-                    </div>
-                </div>
+                            </div>
+                        </div>
 
-                <div x-data="{ open: {{ 'true' if active_page in ['import_testing', 'preprocessing_testing', 'classification_testing'] else 'false' }} }"
-                    class="text-[#1F2937]">
-                    <div @click="open = !open"
-                        class="flex items-center gap-3 cursor-pointer hover:bg-[#DCDDDF] px-4 py-3 rounded-lg transition-all duration-300 ease-in-out">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path fill="#1F2937" fill-rule="evenodd"
-                                d="M9 21.072h12c.41 0 .75-.34.75-.75s-.34-.75-.75-.75H8.999c-2.62 0-3.929 0-4.589-.66s-.66-1.97-.66-4.59v-10c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10c0 3.03 0 4.55 1.1 5.65s2.62 1.1 5.649 1.1zm-3.53-6.22c.15.15.34.22.53.22s.38-.07.53-.22l3.25-3.25c.48-.48.83-.83 1.02-.88c.13-.04.26-.04.41 0c.18.05.53.4 1.01.88c.72.72 1.11 1.11 1.66 1.26c.41.12.84.12 1.23 0c.56-.15.95-.54 1.67-1.26l3.75-3.75c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0l-3.75 3.75l-.002.001c-.48.48-.829.83-1.019.88c-.13.04-.26.04-.41 0c-.18-.05-.529-.4-1.008-.88h-.002c-.72-.72-1.11-1.11-1.66-1.26c-.41-.12-.84-.12-1.23 0c-.56.15-.95.54-1.67 1.26l-3.25 3.25c-.29.29-.29.77 0 1.06"
-                                color="#1F2937" /></svg>
-                        <span class="text-base font-bold">Data Testing</span>
-                        <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 ml-auto transition-transform" fill="none"
-                            viewBox="0 0 24 24">
-                            <path stroke="#1F2937" stroke-width="2" d="M6 9l6 6 6-6" /></svg>
-                    </div>
-                    <div x-show="open" x-transition class="ml-10 mt-4 space-y-5">
-                        <a href="{{ url_for('import_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                        <div x-data="{ open: {{ 'true' if active_page in ['import_testing', 'preprocessing_testing', 'classification_testing'] else 'false' }} }"
+                            class="text-[#1F2937]">
+                            <div @click="open = !open"
+                                class="flex items-center gap-3 cursor-pointer hover:bg-[#DCDDDF] px-4 py-3 rounded-lg transition-all duration-300 ease-in-out">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#1F2937" fill-rule="evenodd"
+                                        d="M9 21.072h12c.41 0 .75-.34.75-.75s-.34-.75-.75-.75H8.999c-2.62 0-3.929 0-4.589-.66s-.66-1.97-.66-4.59v-10c0-.41-.34-.75-.75-.75s-.75.34-.75.75v10c0 3.03 0 4.55 1.1 5.65s2.62 1.1 5.649 1.1zm-3.53-6.22c.15.15.34.22.53.22s.38-.07.53-.22l3.25-3.25c.48-.48.83-.83 1.02-.88c.13-.04.26-.04.41 0c.18.05.53.4 1.01.88c.72.72 1.11 1.11 1.66 1.26c.41.12.84.12 1.23 0c.56-.15.95-.54 1.67-1.26l3.75-3.75c.29-.29.29-.77 0-1.06a.754.754 0 0 0-1.06 0l-3.75 3.75l-.002.001c-.48.48-.829.83-1.019.88c-.13.04-.26.04-.41 0c-.18-.05-.529-.4-1.008-.88h-.002c-.72-.72-1.11-1.11-1.66-1.26c-.41-.12-.84-.12-1.23 0c-.56.15-.95.54-1.67 1.26l-3.25 3.25c-.29.29-.29.77 0 1.06"
+                                        color="#1F2937" /></svg>
+                                <span class="text-base font-bold">Data Testing</span>
+                                <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 ml-auto transition-transform"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <path stroke="#1F2937" stroke-width="2" d="M6 9l6 6 6-6" /></svg>
+                            </div>
+                            <div x-show="open" x-transition class="ml-10 mt-4 space-y-5">
+                                <a href="{{ url_for('import_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'import_testing' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Import
-                            Data</a>
-                        <a href="{{ url_for('preprocessing_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                                    Data</a>
+                                <a href="{{ url_for('preprocessing_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'preprocessing_testing' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Preprocessing</a>
-                        <a href="{{ url_for('classification_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
+                                <a href="{{ url_for('classification_testing') }}" class="block px-4 py-3 rounded-lg transition-all duration-300
                             {% if active_page == 'classification_testing' %}
                             bg-[#2563EB] text-white
                             {% else %}
                             text-[#1F2937] hover:bg-[#DCDDDF]
                             {% endif %}">Classification
-                            Result</a>
-                    </div>
-                </div>
+                                    Result</a>
+                            </div>
+                        </div>
 
-                <a href="{{ url_for('sentence') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+                        <a href="{{ url_for('sentence') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
                     {% if active_page == 'sentence' %}
                     bg-[#2563EB] text-white
                     {% else %}
                     text-[#1F2937] hover:bg-[#DCDDDF]
                     {% endif %}"">
                     <svg xmlns=" http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <g fill="none" fill-rule="evenodd">
-                        <path
-                            d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-                        <path fill="currentColor"
-                            d="M13.586 2A2 2 0 0 1 15 2.586L19.414 7A2 2 0 0 1 20 8.414V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2ZM12 4H6v16h12V10h-4.5A1.5 1.5 0 0 1 12 8.5zm0 8a3 3 0 0 1 2.708 4.293l.706.707A1 1 0 1 1 14 18.414l-.707-.706A3 3 0 1 1 12 12m0 2a1 1 0 1 0 0 2a1 1 0 0 0 0-2m2-9.586V8h3.586z" />
-                    </g>
-                    </svg>
-                    <span class="text-base font-bold">Sentence Checker</span>
-                </a>
-                <a href="{{ url_for('crawl') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
+                            <g fill="none" fill-rule="evenodd">
+                                <path
+                                    d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                                <path fill="currentColor"
+                                    d="M13.586 2A2 2 0 0 1 15 2.586L19.414 7A2 2 0 0 1 20 8.414V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2ZM12 4H6v16h12V10h-4.5A1.5 1.5 0 0 1 12 8.5zm0 8a3 3 0 0 1 2.708 4.293l.706.707A1 1 0 1 1 14 18.414l-.707-.706A3 3 0 1 1 12 12m0 2a1 1 0 1 0 0 2a1 1 0 0 0 0-2m2-9.586V8h3.586z" />
+                            </g>
+                            </svg>
+                            <span class="text-base font-bold">Sentence Checker</span>
+                        </a>
+                        <a href="{{ url_for('crawl') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out
                     {% if active_page == 'crawl' %}
                     bg-[#2563EB] text-white
                     {% else %}
                     text-[#1F2937] hover:bg-[#DCDDDF]
                     {% endif %}"">
                     <svg xmlns=" http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                        stroke-width="2">
-                        <path
-                            d="M10.7 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v4.1M21 21l-1.9-1.9" />
-                        <circle cx="17" cy="17" r="3" />
-                    </g></svg>
-                    <span class="text-base font-bold">Crawling Tweet</span>
-                </a>
-                <a href="{{ url_for('evaluation') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out 
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path
+                                    d="M10.7 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v4.1M21 21l-1.9-1.9" />
+                                <circle cx="17" cy="17" r="3" />
+                            </g></svg>
+                            <span class="text-base font-bold">Crawling Tweet</span>
+                        </a>
+                        <a href="{{ url_for('evaluation') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out 
                     {% if active_page == 'evaluation' %}
                     bg-[#2563EB] text-white
                     {% else %}
                     text-[#1F2937] hover:bg-[#DCDDDF]
                     {% endif %}""">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="1.5"
-                            d="M5 15h5m-5-3h5M5 9h5m3 3l2 2l4-4M3.4 4h17.2A2.4 2.4 0 0 1 23 6.4v11.2a2.4 2.4 0 0 1-2.4 2.4H3.4A2.4 2.4 0 0 1 1 17.6V6.4A2.4 2.4 0 0 1 3.4 4" />
-                    </svg>
-                    <span class="text-base font-bold">Evaluation Model</span>
-                </a>
-            </div>
-
-        </div>
-
-        <!-- Content -->
-        <div class="flex-1 p-9">
-
-            <div class="flex items-center justify-between">
-                <h1 class="text-4xl font-bold tracking-tighter">{% block header %} {% endblock %}</h1>
-
-                <div class="relative inline-block text-left">
-                    <button id="dropdownToggle" type="button"
-                        class="inline-flex justify-center items-center w-full gap-2 cursor-pointer">
-                        <img src="{{ url_for('static', filename='assets/dummy_profile.png') }}" alt="Profile Avatar"
-                            class="object-cover rounded-full" style="width: 40px; height: 40px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path fill="#797979"
-                                d="m8.71 11.71l2.59 2.59c.39.39 1.02.39 1.41 0l2.59-2.59c.63-.63.18-1.71-.71-1.71H9.41c-.89 0-1.33 1.08-.7 1.71" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.5"
+                                    d="M5 15h5m-5-3h5M5 9h5m3 3l2 2l4-4M3.4 4h17.2A2.4 2.4 0 0 1 23 6.4v11.2a2.4 2.4 0 0 1-2.4 2.4H3.4A2.4 2.4 0 0 1 1 17.6V6.4A2.4 2.4 0 0 1 3.4 4" />
                             </svg>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg z-50">
-                        <ul class="py-2 text-sm text-gray-700">
-                            <li>
-                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 hover:bg-gray-100">
-                                    Sign out
-                                </a>
-                            </li>
-                        </ul>
+                            <span class="text-base font-bold">Evaluation Model</span>
+                        </a>
                     </div>
+
                 </div>
 
+                <button class="w-full" @click="openModal=true" type="button">
+                    <a href="#"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 ease-in-out text-[#1F2937] hover:bg-[#DCDDDF]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m19 12l-4-4m4 4l-4 4m4-4H9m5 9a9 9 0 1 1 0-18" /></svg>
+                        <span class="text-base font-bold">Logout</span>
+                    </a>
+                </button>
             </div>
+        </aside>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-y-auto p-9">
+            <h1 class="text-4xl font-bold tracking-tighter">{% block header %} {% endblock %}</h1>
 
             {% block content %}
 
             {% endblock %}
+        </div>
+
+        <!-- Modal logout -->
+        <div x-show="openModal" x-transition.opacity
+            class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm" style="display: none;">
+            <!-- Modal Content -->
+            <div @click.away="openModal = false"
+                class="bg-white rounded-xl shadow-lg max-w-xl  w-full mx-auto p-4 md:p-6">
+
+                <!-- Modal Header -->
+                <div class="flex flex-col border-gray-200 space-y-5">
+                    <h3 class="text-xl font-semibold text-gray-900">Are you sure want to logout?</h3>
+
+                    <div class="flex justify-between gap-2">
+                        <button type="submit"
+                            class="cursor-pointer bg-[#2563EB] rounded-lg text-white font-semibold w-full py-2 px-4 "><a href="{{ url_for('logout') }}">Yes, logout</a></button>
+                        <button type="submit" @click="openModal = false"
+                            class="cursor-pointer bg-[#DCDDDF] rounded-lg text-[#2563EB] font-semibold w-full py-2 px-4 ">Cancel</button>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
     </div>
 
